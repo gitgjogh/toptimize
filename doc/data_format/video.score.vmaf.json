@@ -1,0 +1,68 @@
+{
+    "executorId": "VMAF_VF0.2.4b-0.6.1", 
+    "asset": {
+        "identifier": "cmd_1783255543141937_1783255543141937_source_1920x936_vs__crf_22_1920x936_q_1920x936"
+    }, 
+    "frames": [
+        {
+            "frameNum": 0, 
+            "VMAF_feature_adm2_score": 0.93513396532494797, 
+            "VMAF_feature_motion2_score": 0.0, 
+            "VMAF_feature_vif_scale0_score": 0.60328963735413987, 
+            "VMAF_feature_vif_scale1_score": 0.85421700935829303, 
+            "VMAF_feature_vif_scale2_score": 0.922564052271445, 
+            "VMAF_feature_vif_scale3_score": 0.95466375890280497, 
+            "VMAF_score": 76.549954751299722
+        }, 
+        {
+            "frameNum": 1, 
+            "VMAF_feature_adm2_score": 0.93040330185642972, 
+            "VMAF_feature_motion2_score": 7.0005509999999997, 
+            "VMAF_feature_vif_scale0_score": 0.60079831364765812, 
+            "VMAF_feature_vif_scale1_score": 0.84286367072046819, 
+            "VMAF_feature_vif_scale2_score": 0.91332470780902053, 
+            "VMAF_feature_vif_scale3_score": 0.94827487637821095, 
+            "VMAF_score": 83.029707829609833
+        }, 
+        {
+            "frameNum": 2, 
+            "VMAF_feature_adm2_score": 0.92488840477426304, 
+            "VMAF_feature_motion2_score": 6.9026059999999996, 
+            "VMAF_feature_vif_scale0_score": 0.59643339220503311, 
+            "VMAF_feature_vif_scale1_score": 0.83292554730169821, 
+            "VMAF_feature_vif_scale2_score": 0.90750186218864382, 
+            "VMAF_feature_vif_scale3_score": 0.94561354058246661, 
+            "VMAF_score": 81.32739193611603
+        }, 
+        {
+            "frameNum": 3, 
+            "VMAF_feature_adm2_score": 0.93023189294756292, 
+            "VMAF_feature_motion2_score": 6.9026059999999996, 
+            "VMAF_feature_vif_scale0_score": 0.60599437371201192, 
+            "VMAF_feature_vif_scale1_score": 0.84070345870941832, 
+            "VMAF_feature_vif_scale2_score": 0.9139410078622211, 
+            "VMAF_feature_vif_scale3_score": 0.94882571307915109, 
+            "VMAF_score": 82.949681180146868
+        }, 
+        {
+            "frameNum": 4, 
+            "VMAF_feature_adm2_score": 0.9268687586599279, 
+            "VMAF_feature_motion2_score": 10.721743999999999, 
+            "VMAF_feature_vif_scale0_score": 0.60635630205866353, 
+            "VMAF_feature_vif_scale1_score": 0.83491843560742662, 
+            "VMAF_feature_vif_scale2_score": 0.91095930868505892, 
+            "VMAF_feature_vif_scale3_score": 0.94787060753882235, 
+            "VMAF_score": 86.272151448116716
+        }
+    ], 
+    "aggregate": {
+        "VMAF_feature_adm2_score": 0.89276066231384643, 
+        "VMAF_feature_motion2_score": 5.8169032335958004, 
+        "VMAF_feature_vif_scale0_score": 0.58458201467167314, 
+        "VMAF_feature_vif_scale1_score": 0.81618694514834367, 
+        "VMAF_feature_vif_scale2_score": 0.8937531975979579, 
+        "VMAF_feature_vif_scale3_score": 0.93405149213529504, 
+        "VMAF_score": 72.099572708445478, 
+        "method": "mean"
+    }
+}
