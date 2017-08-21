@@ -2,49 +2,51 @@
     "title": "example",
     "desc": "...",
     "show_all": true,
-    "save_json": "video.rd.raw.json",
-    "graph_prop": {
-        "width":8, "height":5, "subh":1, "subw":2
-    },
+    "save_raw_json": "video.rd.raw.json",
+    "save_plot_json": "video.rd.plot.json",
     "data_format": "cfg_data",
 
-    "axles_cfgs":[
+    "axles_cfg_base": {
+
+    },
+    "axles_cfg_list":[
         {"title":"rate-psnr", "xprop":"rate", "yprop":"psnr", "suby":0, "subx":0},
         {"title":"rate-vmaf", "xprop":"rate", "yprop":"vmaf", "suby":0, "subx":1}
     ],
-    "graph_cfgs":[
+    "graph_cfg_base":{
+        "width":8, "height":5, "subh":1, "subw":2,
+        "show_pic": false, "save_raw_json":null
+    },
+    "graph_cfg_list":[
         {
 			"title":"ergeng1",
 			"input":"/Users/jianfeng15/videos/hd_template/ergeng2.mp4",
-			"save_pic": "ergeng2.png",
-			"show_pic": false, "save_json":null
+			"save_pic": "ergeng2.png"
 		}
     ],
-    "line_cfgs":[
+    "line_cfg_base":{
+        "input_param":"-y -threads 0",
+        "cmp_res": null,
+        "cmp_frames": 2
+    },
+    "line_cfg_list":[
         {
             "label":"x264",
-            "input_param":"-y -threads 0",
             "output_param":"-an -frames %FRAMES% -s 852x480 -crf %CRF% -preset veryslow -vcodec libx264 -x264opts psy=0:ref=5:keyint=90:min-keyint=9:chroma_qp_offset=0:aq_mode=2:threads=36:lookahead-threads=4",
-            "cmp_frames":2
+            "none": null
         },
         {
             "label":"x265",
-            "input_param":"-y -threads 0",
             "output_param":"-an -frames %FRAMES% -s 852x480 -crf %CRF% -preset veryslow -vcodec libx265 -x265-params psy_rd=0:psy_rdoq=0:keyint=90:min-keyint=9:aq_mode=2:pmode=1:pme=1",
-            "cmp_frames":2
+            "none": null
         }
     ],
-    "point_cfgs":[
-        {"label":"crf25", "params":{"CRF":"25", "FRAMES":2}},
-        {"label":"crf27", "params":{"CRF":"27", "FRAMES":2}}
-    ],
-    "point_cfgs2":[
-        {"label":"crf23", "params":{"CRF":"23", "FRAMES":2}},
-        {"label":"crf25", "params":{"CRF":"25", "FRAMES":2}},
-        {"label":"crf27", "params":{"CRF":"27", "FRAMES":2}},
-        {"label":"crf30", "params":{"CRF":"30", "FRAMES":2}},
-        {"label":"crf32", "params":{"CRF":"32", "FRAMES":2}},
-        {"label":"crf34", "params":{"CRF":"34", "FRAMES":2}},
-        {"label":"crf36", "params":{"CRF":"36", "FRAMES":2}}
+    "point_cfg_base":{
+        "FRAMES":2
+    },
+    "point_cfg_list":[
+        {"label":"crf23", "params":{"CRF":"23"}},
+        {"label":"crf25", "params":{"CRF":"25"}},
+        {"label":"crf27", "params":{"CRF":"27"}}
     ]
 }

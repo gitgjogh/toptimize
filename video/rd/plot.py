@@ -67,7 +67,7 @@ def pick_data_for_task_for_axles(raw_line_array, axcfg):
     return dst_axles
 
 
-def pick_data_for_task_for_figure(raw_graph, axles_cfgs, graph_prop):
+def pick_data_for_task_for_figure(raw_graph, axles_cfgs):
     """
     convert multi-dimensional line to 2d-alxes according to @alxes_cfgs
     :return: figure data for plot
@@ -76,22 +76,24 @@ def pick_data_for_task_for_figure(raw_graph, axles_cfgs, graph_prop):
         assert raw_graph["data_format"] == "raw_data"
         dst_graph = {
             "data_format": "plot_data",
-            "width": graph_prop["width"],
-            "height": graph_prop["height"],
-            "subw": graph_prop["subw"],
-            "subh": graph_prop["subh"],
             "axles_array": []
         }
         copy_list = [
-            "title", "input", "show_pic", "save_pic", "save_json"
+            "width", "height", "subw", "subh",
+            "title", "input", "show_pic", "save_pic",
+            "save_raw_json",
+            "save_plot_json"
         ]
         for key in copy_list:
-            dst_graph[key] = raw_graph[key]
+            dst_graph[key] = raw_graph.get(key)
         #
         raw_line_array = raw_graph["line_array"]
         for axcfg in axles_cfgs:
             dst_axles = pick_data_for_task_for_axles(raw_line_array, axcfg)
             dst_graph["axles_array"].append(dst_axles)
+        if dst_graph.get("save_plot_json") is not None:
+            with open(dst_graph.get("save_plot_json"), "w") as f:
+                json.dump(dst_graph, fp=f, indent=4)
         return dst_graph
     except Exception as e:
         log.error("Exception = `%s`", repr(e))
@@ -112,56 +114,61 @@ def pick_data_for_task(raw_task):
             "graph_array": []
         }
         copy_list = [
-            "title", "desc", "show_all", "graph_prop",
-            "axles_cfgs", "graph_cfgs", "line_cfgs", "point_cfgs"
+            "title", "desc", "show_all",
+            "axles_cfg_list",
+            "graph_cfg_list",
+            "line_cfg_list",
+            "point_cfg_list",
+            "save_raw_json",
+            "save_plot_json"
         ]
         for key in copy_list:
-            dst_task[key] = raw_task[key]
+            dst_task[key] = raw_task.get(key)
         #
         for raw_graph in raw_task["graph_array"]:
-            dst_graph = pick_data_for_task_for_figure(raw_graph,
-                                                      axles_cfgs=raw_task["axles_cfgs"],
-                                                      graph_prop=raw_task["graph_prop"])
+            dst_graph = pick_data_for_task_for_figure(raw_graph, raw_task["axles_cfg_list"])
             dst_task["graph_array"].append(dst_graph)
+        #
+        if dst_task.get("save_plot_json") is not None:
+            with open(dst_task.get("save_plot_json"), "w") as f:
+                json.dump(dst_task, fp=f, indent=4)
+        #
         return dst_task
     except Exception as e:
         log.error("Exception = `%s`", repr(e))
         raise e
 
 
-def plot_axles_data(fig, gs, axles_data):
-    subpos = gs[axles_data["suby"], axles_data["subx"]]
+def plot_axles_data(fig, gs, dst_axles):
+    subpos = gs[dst_axles["suby"], dst_axles["subx"]]
     ax = fig.add_subplot(subpos)
-    ax.set_title(axles_data["title"], fontproperties=chsfont)
-    ax.set_xlabel(axles_data["xlabel"], fontproperties=chsfont)
-    ax.set_ylabel(axles_data["ylabel"], fontproperties=chsfont)
+    ax.set_title(dst_axles["title"], fontproperties=chsfont)
+    ax.set_xlabel(dst_axles["xlabel"], fontproperties=chsfont)
+    ax.set_ylabel(dst_axles["ylabel"], fontproperties=chsfont)
     #
-    for axles_data in axles_data["line_array"]:
-        ax.plot(axles_data["xlist"], axles_data["ylist"], '-*', label=axles_data["label"])
+    for dst_axles in dst_axles["line_array"]:
+        ax.plot(dst_axles["xlist"], dst_axles["ylist"], '-*', label=dst_axles["label"])
     #
     ax.legend(fontsize=10, loc=0, prop=chsfont)
     ax.grid(True)
     return ax
 
 
-def plot_figure_data(graph_data):
+def plot_figure_data(dst_graph):
     try:
-        assert graph_data["data_format"] == "plot_data"
-        log.info(json.dumps(graph_data, indent=4))
-        if graph_data.get("save_json") is not None:
-            with open(graph_data.get("save_json"), "w") as f:
-                json.dump(graph_data, fp=f, indent=4)
+        assert dst_graph["data_format"] == "plot_data"
+        log.info(json.dumps(dst_graph, indent=4))
         #
-        figsize = (graph_data["width"], graph_data["height"])
-        figure = plt.figure(graph_data["title"], figsize=figsize)
-        gs = gridspec.GridSpec(graph_data["subh"], graph_data["subw"])
-        for axles_data in graph_data["axles_array"]:
-            plot_axles_data(figure, gs, axles_data)
+        figsize = (dst_graph["width"], dst_graph["height"])
+        figure = plt.figure(dst_graph["title"], figsize=figsize)
+        gs = gridspec.GridSpec(dst_graph["subh"], dst_graph["subw"])
+        for dst_axles in dst_graph["axles_array"]:
+            plot_axles_data(figure, gs, dst_axles)
         figure.tight_layout()
         #
-        if graph_data.get("save_pic") is not None:
-            figure.savefig(graph_data["save_pic"])
-        if graph_data.get("show_pic") is True:
+        if dst_graph.get("save_pic") is not None:
+            figure.savefig(dst_graph["save_pic"])
+        if dst_graph.get("show_pic") is True:
             plt.show(figure)
         return figure
     except Exception as e:
@@ -169,15 +176,10 @@ def plot_figure_data(graph_data):
         raise e
 
 
-def plot_task_data(task_data):
+def plot_task_data(dst_task):
     try:
-        assert task_data["data_format"] == "plot_data"
-        #
-        if task_data.get("save_json") is not None:
-            with open(task_data.get("save_json"), "w") as f:
-                json.dump(task_data, fp=f, indent=4)
-        #
-        for graph_data in task_data["graph_array"]:
+        assert dst_task["data_format"] == "plot_data"
+        for graph_data in dst_task["graph_array"]:
             figure = plot_figure_data(graph_data)
     except Exception as e:
         log.error("Exception = `%s`", repr(e))

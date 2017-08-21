@@ -1,142 +1,173 @@
 {
-	"title": "?",
-	"desc": "...",
-	"show_all": true,
-	"graph_prop": {
-		"width":8, "height":5, "subh":1, "subw":2
-	},
+    "graph_cfg_list": [
+        {
+            "subw": 2,
+            "save_raw_json": null,
+            "title": "ergeng1",
+            "save_pic": "ergeng2.png",
+            "height": 5,
+            "width": 8,
+            "show_pic": false,
+            "input": "/Users/jianfeng15/videos/hd_template/ergeng2.mp4",
+            "subh": 1
+        }
+    ],
+    "save_plot_json": "video.rd.plot.json",
+    "save_raw_json": "video.rd.raw.json",
+    "graph_array": [
+        {
+            "subw": 2,
+            "save_plot_json": null,
+            "save_raw_json": null,
+            "title": "ergeng1",
+            "save_pic": "ergeng2.png",
+            "data_format": "raw_data",
+            "height": 5,
+            "width": 8,
+            "line_array": [
+                {
+                    "command_pattern": null,
+                    "point_array": [
+                        {
+                            "trans_time": 0.23500609397888184,
+                            "psnr": 40.158463,
+                            "vmaf": 59.95453760968661,
+                            "ssim": 0.917427,
+                            "iparam": "-y -threads 0",
+                            "label": "crf23",
+                            "rate": "773178",
+                            "oparam": "-an -frames 2 -s 852x480 -crf 23 -preset veryslow -vcodec libx264 -x264opts psy=0:ref=5:keyint=90:min-keyint=9:chroma_qp_offset=0:aq_mode=2:threads=36:lookahead-threads=4",
+                            "output": "ergeng2.mp4.[label-x264].[FRAMES-2].[CRF-23].mp4"
+                        },
+                        {
+                            "trans_time": 0.2518479824066162,
+                            "psnr": 39.803952,
+                            "vmaf": 53.483262331181606,
+                            "ssim": 0.912224,
+                            "iparam": "-y -threads 0",
+                            "label": "crf25",
+                            "rate": "373930",
+                            "oparam": "-an -frames 2 -s 852x480 -crf 25 -preset veryslow -vcodec libx264 -x264opts psy=0:ref=5:keyint=90:min-keyint=9:chroma_qp_offset=0:aq_mode=2:threads=36:lookahead-threads=4",
+                            "output": "ergeng2.mp4.[label-x264].[FRAMES-2].[CRF-25].mp4"
+                        },
+                        {
+                            "trans_time": 0.21042704582214355,
+                            "psnr": 39.63616,
+                            "vmaf": 48.349602915664015,
+                            "ssim": 0.910177,
+                            "iparam": "-y -threads 0",
+                            "label": "crf27",
+                            "rate": "203028",
+                            "oparam": "-an -frames 2 -s 852x480 -crf 27 -preset veryslow -vcodec libx264 -x264opts psy=0:ref=5:keyint=90:min-keyint=9:chroma_qp_offset=0:aq_mode=2:threads=36:lookahead-threads=4",
+                            "output": "ergeng2.mp4.[label-x264].[FRAMES-2].[CRF-27].mp4"
+                        }
+                    ],
+                    "label": "x264"
+                },
+                {
+                    "command_pattern": null,
+                    "point_array": [
+                        {
+                            "trans_time": 0.43358898162841797,
+                            "psnr": 40.030581,
+                            "vmaf": 56.823558726856525,
+                            "ssim": 0.915282,
+                            "iparam": "-y -threads 0",
+                            "label": "crf23",
+                            "rate": "466477",
+                            "oparam": "-an -frames 2 -s 852x480 -crf 23 -preset veryslow -vcodec libx265 -x265-params psy_rd=0:psy_rdoq=0:keyint=90:min-keyint=9:aq_mode=2:pmode=1:pme=1",
+                            "output": "ergeng2.mp4.[label-x265].[FRAMES-2].[CRF-23].mp4"
+                        },
+                        {
+                            "trans_time": 0.38913416862487793,
+                            "psnr": 39.69515,
+                            "vmaf": 49.77502499076053,
+                            "ssim": 0.910568,
+                            "iparam": "-y -threads 0",
+                            "label": "crf25",
+                            "rate": "202837",
+                            "oparam": "-an -frames 2 -s 852x480 -crf 25 -preset veryslow -vcodec libx265 -x265-params psy_rd=0:psy_rdoq=0:keyint=90:min-keyint=9:aq_mode=2:pmode=1:pme=1",
+                            "output": "ergeng2.mp4.[label-x265].[FRAMES-2].[CRF-25].mp4"
+                        },
+                        {
+                            "trans_time": 0.38439297676086426,
+                            "psnr": 39.510267,
+                            "vmaf": 42.803416013041925,
+                            "ssim": 0.908974,
+                            "iparam": "-y -threads 0",
+                            "label": "crf27",
+                            "rate": "93794",
+                            "oparam": "-an -frames 2 -s 852x480 -crf 27 -preset veryslow -vcodec libx265 -x265-params psy_rd=0:psy_rdoq=0:keyint=90:min-keyint=9:aq_mode=2:pmode=1:pme=1",
+                            "output": "ergeng2.mp4.[label-x265].[FRAMES-2].[CRF-27].mp4"
+                        }
+                    ],
+                    "label": "x265"
+                }
+            ],
+            "show_pic": false,
+            "input": "/Users/jianfeng15/videos/hd_template/ergeng2.mp4",
+            "subh": 1
+        }
+    ],
+    "title": "example",
+    "line_cfg_list": [
+        {
+            "cmp_res": null,
+            "input_param": "-y -threads 0",
+            "none": null,
+            "label": "x264",
+            "output_param": "-an -frames %FRAMES% -s 852x480 -crf %CRF% -preset veryslow -vcodec libx264 -x264opts psy=0:ref=5:keyint=90:min-keyint=9:chroma_qp_offset=0:aq_mode=2:threads=36:lookahead-threads=4",
+            "cmp_frames": 2
+        },
+        {
+            "cmp_res": null,
+            "input_param": "-y -threads 0",
+            "none": null,
+            "label": "x265",
+            "output_param": "-an -frames %FRAMES% -s 852x480 -crf %CRF% -preset veryslow -vcodec libx265 -x265-params psy_rd=0:psy_rdoq=0:keyint=90:min-keyint=9:aq_mode=2:pmode=1:pme=1",
+            "cmp_frames": 2
+        }
+    ],
+    "show_all": true,
     "data_format": "raw_data",
-
-	"axles_cfgs":[
-		{"title":"rate-psnr", "xprop":"rate", "yprop":"psnr", "suby":0, "subx":0},
-		{"title":"rate-vmaf", "xprop":"rate", "yprop":"vmaf", "suby":0, "subx":1}
-	],
-	"graph_cfgs":[
-		{"title":"foreman", "input":"foreman.yuv", "save_pic":"foreman.png"},
-		{"title":"football", "input":"foreman.yuv", "save_pic":"football.png"}
-	],
-	"line_cfgs":[
-		{"label":"x264", "command_pattern":"xxx %GRAPH_INPUT% xxx %CRF% xxx"},
-		{"label":"x265", "command_pattern":"xxx %GRAPH_INPUT% xxx %CRF% xxx"}
-	],
-	"point_cfgs":[
-		{"label":"crf23", "params":{"CRF":"23"}},
-		{"label":"crf25", "params":{"CRF":"25"}},
-        {"label":"crf27", "params":{"CRF":"27"}}
-	],
-
-	"graph_array":[
-		{
-			"data_format": "raw_data",
-			"title": "foreman",
-			"input": "foreman.yuv",
-			"show_pic": false,
-			"save_pic": "foreman.png",
-			"save_json": "foreman.json",
-			"line_array": [
-				{
-					"label": "x264",
-					"point_array": [
-						{
-							"label": "crf23",
-							"rate": 23000,
-							"psnr": 23,
-							"vmaf": 63
-						},
-						{
-							"label": "crf25",
-							"rate": 25000,
-							"psnr": 25,
-							"vmaf": 65
-						},
-						{
-							"label": "crf27",
-							"rate": 27000,
-							"psnr": 27,
-							"vmaf": 67
-						}
-					]
-				},
-				{
-					"label": "x265",
-					"point_array": [
-						{
-							"label": "crf23",
-							"rate": 13000,
-							"psnr": 23,
-							"vmaf": 73
-						},
-						{
-							"label": "crf25",
-							"rate": 15000,
-							"psnr": 25,
-							"vmaf": 75
-						},
-						{
-							"label": "crf27",
-							"rate": 17000,
-							"psnr": 27,
-							"vmaf": 77
-						}
-					]
-				}
-			]
-		},
-		{
-			"data_format": "raw_data",
-			"title": "football",
-			"input": "football.yuv",
-			"show_pic": false,
-			"save_pic": "football.png",
-			"save_json": "football.json",
-			"line_array": [
-				{
-					"label": "x264",
-					"point_array": [
-						{
-							"label": "crf23",
-							"rate": 23000,
-							"psnr": 23,
-							"vmaf": 53
-						},
-						{
-							"label": "crf25",
-							"rate": 25000,
-							"psnr": 25,
-							"vmaf": 65
-						},
-						{
-							"label": "crf27",
-							"rate": 27000,
-							"psnr": 27,
-							"vmaf": 77
-						}
-					]
-				},
-				{
-					"label": "x265",
-					"point_array": [
-						{
-							"label": "crf23",
-							"rate": 13000,
-							"psnr": 23,
-							"vmaf": 73
-						},
-						{
-							"label": "crf25",
-							"rate": 15000,
-							"psnr": 25,
-							"vmaf": 75
-						},
-						{
-							"label": "crf27",
-							"rate": 17000,
-							"psnr": 27,
-							"vmaf": 77
-						}
-					]
-				}
-			]
-		}
-	]
+    "axles_cfg_list": [
+        {
+            "suby": 0,
+            "yprop": "psnr",
+            "subx": 0,
+            "xprop": "rate",
+            "title": "rate-psnr"
+        },
+        {
+            "suby": 0,
+            "yprop": "vmaf",
+            "subx": 1,
+            "xprop": "rate",
+            "title": "rate-vmaf"
+        }
+    ],
+    "point_cfg_list": [
+        {
+            "params": {
+                "FRAMES": 2,
+                "CRF": "23"
+            },
+            "label": "crf23"
+        },
+        {
+            "params": {
+                "FRAMES": 2,
+                "CRF": "25"
+            },
+            "label": "crf25"
+        },
+        {
+            "params": {
+                "FRAMES": 2,
+                "CRF": "27"
+            },
+            "label": "crf27"
+        }
+    ],
+    "desc": "..."
 }

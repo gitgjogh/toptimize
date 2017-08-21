@@ -67,7 +67,7 @@ def collect_point_data(graph_cfg, line_cfg, point_cfg):
     if ret == 0:
         ori_fmt = trans.Format(input, probe=True)
         dis_fmt = trans.Format(output, probe=True)
-        cmp_res = line_cfg.get("cmp_size")
+        cmp_res = line_cfg.get("cmp_res")
         cmp_frm = line_cfg.get("cmp_frames")
         psnr, ssim, vmaf = score.get_yuv_score(ori_fmt, dis_fmt, cmp_res, cmp_frames=cmp_frm)
         raw_point_data.update({
@@ -102,7 +102,10 @@ def collect_figure_data(graph_cfg, line_cfgs, point_cfgs):
         "line_array": []
     }
     copy_list = [
-        "title", "input", "show_pic", "save_pic", "save_json"
+        "width", "height", "subw", "subh",
+        "title", "input", "show_pic", "save_pic",
+        "save_raw_json",
+        "save_plot_json"
     ]
     for key in copy_list:
         raw_graph[key] = graph_cfg.get(key)
@@ -110,6 +113,11 @@ def collect_figure_data(graph_cfg, line_cfgs, point_cfgs):
     for line_cfg in line_cfgs:
         raw_line = collect_line_data(graph_cfg, line_cfg, point_cfgs)
         raw_graph["line_array"].append(raw_line)
+    #
+    if raw_graph.get("save_raw_json") is not None:
+        with open(raw_graph.get("save_raw_json"), "w") as f:
+            json.dump(raw_graph, fp=f, indent=4)
+    #
     return raw_graph
 
 
@@ -121,19 +129,30 @@ def collect_task_data(task_cfg):
             "graph_array": []
         }
         copy_list = [
-            "title", "desc", "show_all", "graph_prop",
-            "axles_cfgs", "graph_cfgs", "line_cfgs", "point_cfgs"
+            "title", "desc", "show_all",
+            "axles_cfg_list",
+            "graph_cfg_list",
+            "line_cfg_list",
+            "point_cfg_list",
+            "save_raw_json",
+            "save_plot_json"
         ]
         for key in copy_list:
             raw_task[key] = task_cfg.get(key)
         #
-        graph_cfgs = task_cfg["graph_cfgs"]
-        line_cfgs = task_cfg["line_cfgs"]
-        point_cfgs = task_cfg["point_cfgs"]
+        graph_cfgs = task_cfg["graph_cfg_list"]
+        line_cfgs = task_cfg["line_cfg_list"]
+        point_cfgs = task_cfg["point_cfg_list"]
         #
         for graph_cfg in graph_cfgs:
             raw_graph = collect_figure_data(graph_cfg, line_cfgs, point_cfgs)
             raw_task["graph_array"].append(raw_graph)
+        #
+        print raw_task.get("save_raw_json")
+        if raw_task.get("save_raw_json") is not None:
+            with open(raw_task.get("save_raw_json"), "w") as f:
+                json.dump(raw_task, fp=f, indent=4)
+        #
         return raw_task
     except Exception as e:
         log.error("Exception = `%s`", repr(e))

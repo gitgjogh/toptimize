@@ -57,19 +57,47 @@ def _input_check(task_cfg):
     :return: 0 for ok, else something problem
     """
     ret = 0
-    graph_cfgs = task_cfg["graph_cfgs"]
-    for graph in graph_cfgs:
+    graph_cfg_list = task_cfg["graph_cfg_list"]
+    for graph in graph_cfg_list:
         ret += _file_check(graph["input"])
     return ret
 
 
-def run_rd_task(task_cfg):
-    if _tool_check():
+def start_check(task_cfg):
+    if _tool_check() != 0:
         log.error("tool check failed")
-        return None
-    if _input_check(task_cfg):
+        return 1
+    if _input_check(task_cfg) != 0:
         log.error("input check failed")
-        return None
+        return 2
+    return 0
+
+
+def _copy_non_exist_key(cfg_list, cfg_base):
+    for key in cfg_base:
+        for entry in cfg_list:
+            entry[key] = entry.get(key, cfg_base[key])
+
+
+def config_parse(task_cfg):
+    """
+    turn user config to task config
+    :param task_cfg:
+    :return:
+    """
+    _copy_non_exist_key(task_cfg["graph_cfg_list"], task_cfg["graph_cfg_base"])
+    _copy_non_exist_key(task_cfg["axles_cfg_list"], task_cfg["axles_cfg_base"])
+    _copy_non_exist_key(task_cfg["line_cfg_list"], task_cfg["line_cfg_base"])
+    cfg_array, cfg_base = task_cfg["point_cfg_list"], task_cfg["point_cfg_base"]
+    for key in cfg_base:
+        for entry in cfg_array:
+            entry["params"][key] = entry["params"].get(key, cfg_base[key])
+
+
+def run_rd_task(task_cfg):
+    if start_check(task_cfg) != 0:
+        raise ValueError("missing tools or config error")
+    config_parse(task_cfg)
     try:
         raw_task_data = collect.collect_task_data(task_cfg)
         dst_task_data = plot.pick_data_for_task(raw_task_data)
@@ -78,9 +106,6 @@ def run_rd_task(task_cfg):
         log.error("Exception = `%s`", repr(e))
         raise e
     #
-    if dst_task_data.get("save_json") is not None:
-        with open(dst_task_data.get("save_json"), "w") as f:
-            json.dump(dst_task_data, fp=f, indent=4)
     return dst_task_data
 
 

@@ -1,7 +1,23 @@
 {
+    "graph_cfg_list": [
+        {
+            "subw": 2,
+            "save_raw_json": null,
+            "title": "ergeng1",
+            "save_pic": "ergeng2.png",
+            "height": 5,
+            "width": 8,
+            "show_pic": false,
+            "input": "/Users/jianfeng15/videos/hd_template/ergeng2.mp4",
+            "subh": 1
+        }
+    ],
+    "save_plot_json": "video.rd.plot.json",
+    "save_raw_json": "video.rd.raw.json",
     "graph_array": [
         {
             "subw": 2,
+            "save_plot_json": null,
             "axles_array": [
                 {
                     "title": "rate-psnr",
@@ -12,27 +28,27 @@
                     "line_array": [
                         {
                             "ylist": [
-                                23,
-                                25,
-                                27
+                                40.158463,
+                                39.803952,
+                                39.63616
                             ],
                             "xlist": [
-                                23000,
-                                25000,
-                                27000
+                                "773178",
+                                "373930",
+                                "203028"
                             ],
                             "label": "x264"
                         },
                         {
                             "ylist": [
-                                23,
-                                25,
-                                27
+                                40.030581,
+                                39.69515,
+                                39.510267
                             ],
                             "xlist": [
-                                13000,
-                                15000,
-                                17000
+                                "466477",
+                                "202837",
+                                "93794"
                             ],
                             "label": "x265"
                         }
@@ -47,158 +63,66 @@
                     "line_array": [
                         {
                             "ylist": [
-                                63,
-                                65,
-                                67
+                                59.95453760968661,
+                                53.483262331181606,
+                                48.349602915664015
                             ],
                             "xlist": [
-                                23000,
-                                25000,
-                                27000
+                                "773178",
+                                "373930",
+                                "203028"
                             ],
                             "label": "x264"
                         },
                         {
                             "ylist": [
-                                73,
-                                75,
-                                77
+                                56.823558726856525,
+                                49.77502499076053,
+                                42.803416013041925
                             ],
                             "xlist": [
-                                13000,
-                                15000,
-                                17000
+                                "466477",
+                                "202837",
+                                "93794"
                             ],
                             "label": "x265"
                         }
                     ]
                 }
             ],
-            "title": "foreman",
-            "save_pic": "foreman.png",
+            "title": "ergeng1",
+            "save_pic": "ergeng2.png",
+            "save_raw_json": null,
             "data_format": "plot_data",
             "height": 5,
             "width": 8,
             "show_pic": false,
-            "save_json": "",
-            "input": "foreman.yuv",
-            "subh": 1
-        },
-        {
-            "subw": 2,
-            "axles_array": [
-                {
-                    "title": "rate-psnr",
-                    "subx": 0,
-                    "suby": 0,
-                    "xlabel": "rate",
-                    "ylabel": "psnr",
-                    "line_array": [
-                        {
-                            "ylist": [
-                                23,
-                                25,
-                                27
-                            ],
-                            "xlist": [
-                                23000,
-                                25000,
-                                27000
-                            ],
-                            "label": "x264"
-                        },
-                        {
-                            "ylist": [
-                                23,
-                                25,
-                                27
-                            ],
-                            "xlist": [
-                                13000,
-                                15000,
-                                17000
-                            ],
-                            "label": "x265"
-                        }
-                    ]
-                },
-                {
-                    "title": "rate-vmaf",
-                    "subx": 1,
-                    "suby": 0,
-                    "xlabel": "rate",
-                    "ylabel": "vmaf",
-                    "line_array": [
-                        {
-                            "ylist": [
-                                53,
-                                65,
-                                77
-                            ],
-                            "xlist": [
-                                23000,
-                                25000,
-                                27000
-                            ],
-                            "label": "x264"
-                        },
-                        {
-                            "ylist": [
-                                73,
-                                75,
-                                77
-                            ],
-                            "xlist": [
-                                13000,
-                                15000,
-                                17000
-                            ],
-                            "label": "x265"
-                        }
-                    ]
-                }
-            ],
-            "title": "football",
-            "save_pic": "football.png",
-            "data_format": "plot_data",
-            "height": 5,
-            "width": 8,
-            "show_pic": false,
-            "save_json": "",
-            "input": "football.yuv",
+            "input": "/Users/jianfeng15/videos/hd_template/ergeng2.mp4",
             "subh": 1
         }
     ],
-    "title": "?",
+    "title": "example",
+    "line_cfg_list": [
+        {
+            "cmp_res": null,
+            "input_param": "-y -threads 0",
+            "none": null,
+            "label": "x264",
+            "output_param": "-an -frames %FRAMES% -s 852x480 -crf %CRF% -preset veryslow -vcodec libx264 -x264opts psy=0:ref=5:keyint=90:min-keyint=9:chroma_qp_offset=0:aq_mode=2:threads=36:lookahead-threads=4",
+            "cmp_frames": 2
+        },
+        {
+            "cmp_res": null,
+            "input_param": "-y -threads 0",
+            "none": null,
+            "label": "x265",
+            "output_param": "-an -frames %FRAMES% -s 852x480 -crf %CRF% -preset veryslow -vcodec libx265 -x265-params psy_rd=0:psy_rdoq=0:keyint=90:min-keyint=9:aq_mode=2:pmode=1:pme=1",
+            "cmp_frames": 2
+        }
+    ],
     "show_all": true,
     "data_format": "plot_data",
-    "graph_prop": {
-        "width": 8,
-        "subw": 2,
-        "subh": 1,
-        "height": 5
-    },
-    "point_cfgs": [
-        {
-            "params": {
-                "CRF": "23"
-            },
-            "label": "crf23"
-        },
-        {
-            "params": {
-                "CRF": "25"
-            },
-            "label": "crf25"
-        },
-        {
-            "params": {
-                "CRF": "27"
-            },
-            "label": "crf27"
-        }
-    ],
-    "axles_cfgs": [
+    "axles_cfg_list": [
         {
             "suby": 0,
             "yprop": "psnr",
@@ -214,26 +138,27 @@
             "title": "rate-vmaf"
         }
     ],
-    "line_cfgs": [
+    "point_cfg_list": [
         {
-            "command_pattern": "xxx %GRAPH_INPUT% xxx %CRF% xxx",
-            "label": "x264"
+            "params": {
+                "FRAMES": 2,
+                "CRF": "23"
+            },
+            "label": "crf23"
         },
         {
-            "command_pattern": "xxx %GRAPH_INPUT% xxx %CRF% xxx",
-            "label": "x265"
-        }
-    ],
-    "graph_cfgs": [
-        {
-            "input": "foreman.yuv",
-            "save_pic": "foreman.png",
-            "title": "foreman"
+            "params": {
+                "FRAMES": 2,
+                "CRF": "25"
+            },
+            "label": "crf25"
         },
         {
-            "input": "foreman.yuv",
-            "save_pic": "football.png",
-            "title": "football"
+            "params": {
+                "FRAMES": 2,
+                "CRF": "27"
+            },
+            "label": "crf27"
         }
     ],
     "desc": "..."
