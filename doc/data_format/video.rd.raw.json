@@ -49,19 +49,23 @@
         {
             "title": "rate-psnr",
             "yprop": "psnr",
-            "xprop": "rate",
             "subx": 0,
-            "suby": 0
+            "suby": 0,
+            "show_point_label": true,
+            "xprop": "rate"
         },
         {
             "title": "rate-vmaf",
             "yprop": "vmaf",
-            "xprop": "rate",
             "subx": 1,
-            "suby": 0
+            "suby": 0,
+            "show_point_label": true,
+            "xprop": "rate"
         }
     ],
-    "axles_cfg_base": {},
+    "axles_cfg_base": {
+        "show_point_label": true
+    },
     "graph_array": [
         {
             "subw": 2,
@@ -78,7 +82,7 @@
                     "none": null,
                     "point_array": [
                         {
-                            "trans_time": 0.42966198921203613,
+                            "trans_time": 0.2510218620300293,
                             "psnr": 40.158463,
                             "vmaf": 59.95453760968661,
                             "ssim": 0.917427,
@@ -89,7 +93,7 @@
                             "output": "save_video/ergeng2.mp4.[label-x264].[FRAMES-2].[CRF-23].mp4"
                         },
                         {
-                            "trans_time": 0.24360918998718262,
+                            "trans_time": 0.2438662052154541,
                             "psnr": 39.803952,
                             "vmaf": 53.483262331181606,
                             "ssim": 0.912224,
@@ -100,7 +104,7 @@
                             "output": "save_video/ergeng2.mp4.[label-x264].[FRAMES-2].[CRF-25].mp4"
                         },
                         {
-                            "trans_time": 0.33112215995788574,
+                            "trans_time": 0.2227611541748047,
                             "psnr": 39.63616,
                             "vmaf": 48.349602915664015,
                             "ssim": 0.910177,
@@ -121,7 +125,7 @@
                     "none": null,
                     "point_array": [
                         {
-                            "trans_time": 0.6891670227050781,
+                            "trans_time": 0.44859910011291504,
                             "psnr": 40.030581,
                             "vmaf": 56.823558726856525,
                             "ssim": 0.915282,
@@ -132,7 +136,7 @@
                             "output": "save_video/ergeng2.mp4.[label-x265].[FRAMES-2].[CRF-23].mp4"
                         },
                         {
-                            "trans_time": 0.39858317375183105,
+                            "trans_time": 0.4124429225921631,
                             "psnr": 39.69515,
                             "vmaf": 49.77502499076053,
                             "ssim": 0.910568,
@@ -143,7 +147,7 @@
                             "output": "save_video/ergeng2.mp4.[label-x265].[FRAMES-2].[CRF-25].mp4"
                         },
                         {
-                            "trans_time": 0.396420955657959,
+                            "trans_time": 0.52121901512146,
                             "psnr": 39.510267,
                             "vmaf": 42.803416013041925,
                             "ssim": 0.908974,

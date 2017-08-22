@@ -54,23 +54,24 @@ def pick_data_for_task_for_axles(raw_line_array, axcfg):
     xprop = axcfg["xprop"]
     yprop = axcfg["yprop"]
 
-    dst_axles = {
-        "title": axcfg["title"],
-        "subx": axcfg["subx"],
-        "suby": axcfg["suby"],
+    dst_axles = copy.deepcopy(axcfg)
+    dst_axles.update({
         "xlabel": axcfg.get("xlabel", xprop),
         "ylabel": axcfg.get("ylabel", yprop),
         "line_array": []
-    }
+    })
+    #
     for raw_line in raw_line_array:
         dst_line = {
             "label": raw_line["label"],
+            "tlist": [],
             "xlist": [],
             "ylist": []
         }
         for raw_point in raw_line["point_array"]:
             dst_line["xlist"].append(raw_point[xprop])
             dst_line["ylist"].append(raw_point[yprop])
+            dst_line["tlist"].append(raw_point["label"])
         dst_axles["line_array"].append(dst_line)
     return dst_axles
 
@@ -148,8 +149,12 @@ def plot_axles_data(fig, gs, dst_axles):
     ax.set_xlabel(dst_axles["xlabel"], fontproperties=chsfont)
     ax.set_ylabel(dst_axles["ylabel"], fontproperties=chsfont)
     #
-    for dst_axles in dst_axles["line_array"]:
-        ax.plot(dst_axles["xlist"], dst_axles["ylist"], '-*', label=dst_axles["label"])
+    for dst_line in dst_axles["line_array"]:
+        p = ax.plot(dst_line["xlist"], dst_line["ylist"], '-*', label=dst_line["label"])
+        if dst_axles.get("show_point_label") is True:
+            for idx, val in enumerate(dst_line["tlist"]):
+                x,y = dst_line["xlist"][idx], dst_line["ylist"][idx]
+                ax.annotate(val, xy=(x, y), color=p[0].get_color())
     #
     ax.legend(fontsize=10, loc=0, prop=chsfont)
     ax.grid(True)

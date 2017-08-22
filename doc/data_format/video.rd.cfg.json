@@ -10,7 +10,7 @@
     "yuv_save_dir": "save_yuv",
 
     "axles_cfg_base": {
-
+        "show_point_label": true
     },
     "axles_cfg_list":[
         {"title":"rate-psnr", "xprop":"rate", "yprop":"psnr", "suby":0, "subx":0},
