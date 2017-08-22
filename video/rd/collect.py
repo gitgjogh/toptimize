@@ -19,6 +19,7 @@
 import os
 import json
 import time
+import copy
 import logging
 import subprocess
 import video.info as info
@@ -81,14 +82,10 @@ def collect_point_data(graph_cfg, line_cfg, point_cfg):
 
 
 def collect_line_data(graph_cfg, line_cfg, point_cfgs):
-    raw_line = {
+    raw_line = copy.deepcopy(line_cfg)
+    raw_line.update({
         "point_array": []
-    }
-    copy_list = [
-        "label", "command_pattern"
-    ]
-    for key in copy_list:
-        raw_line[key] = line_cfg.get(key)
+    })
     #
     for point_cfg in point_cfgs:
         raw_point_data = collect_point_data(graph_cfg, line_cfg, point_cfg)
@@ -97,18 +94,11 @@ def collect_line_data(graph_cfg, line_cfg, point_cfgs):
 
 
 def collect_figure_data(graph_cfg, line_cfgs, point_cfgs):
-    raw_graph = {
+    raw_graph = copy.deepcopy(graph_cfg)
+    raw_graph.update({
         "data_format": "raw_data",
         "line_array": []
-    }
-    copy_list = [
-        "width", "height", "subw", "subh",
-        "title", "input", "show_pic", "save_pic",
-        "save_raw_json",
-        "save_plot_json"
-    ]
-    for key in copy_list:
-        raw_graph[key] = graph_cfg.get(key)
+    })
     #
     for line_cfg in line_cfgs:
         raw_line = collect_line_data(graph_cfg, line_cfg, point_cfgs)
@@ -124,21 +114,11 @@ def collect_figure_data(graph_cfg, line_cfgs, point_cfgs):
 def collect_task_data(task_cfg):
     try:
         assert task_cfg["data_format"] == "cfg_data"
-        raw_task = {
+        raw_task = copy.deepcopy(task_cfg)
+        raw_task.update({
             "data_format": "raw_data",
             "graph_array": []
-        }
-        copy_list = [
-            "title", "desc", "show_all",
-            "axles_cfg_list",
-            "graph_cfg_list",
-            "line_cfg_list",
-            "point_cfg_list",
-            "save_raw_json",
-            "save_plot_json"
-        ]
-        for key in copy_list:
-            raw_task[key] = task_cfg.get(key)
+        })
         #
         graph_cfgs = task_cfg["graph_cfg_list"]
         line_cfgs = task_cfg["line_cfg_list"]

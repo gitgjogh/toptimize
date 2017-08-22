@@ -16,6 +16,7 @@
  # limitations under the License.
 ##############################################################################
 
+import copy
 import json
 import logging
 import subprocess
@@ -48,8 +49,8 @@ def pick_data_for_task_for_axles(raw_line_array, axcfg):
 
     dst_axles = {
         "title": axcfg["title"],
-        "subx": axcfg.get("subx"),
-        "suby": axcfg.get("suby"),
+        "subx": axcfg["subx"],
+        "suby": axcfg["suby"],
         "xlabel": axcfg.get("xlabel", xprop),
         "ylabel": axcfg.get("ylabel", yprop),
         "line_array": []
@@ -74,18 +75,11 @@ def pick_data_for_task_for_figure(raw_graph, axles_cfgs):
     """
     try:
         assert raw_graph["data_format"] == "raw_data"
-        dst_graph = {
+        dst_graph = copy.deepcopy(raw_graph)
+        dst_graph.update({
             "data_format": "plot_data",
             "axles_array": []
-        }
-        copy_list = [
-            "width", "height", "subw", "subh",
-            "title", "input", "show_pic", "save_pic",
-            "save_raw_json",
-            "save_plot_json"
-        ]
-        for key in copy_list:
-            dst_graph[key] = raw_graph.get(key)
+        })
         #
         raw_line_array = raw_graph["line_array"]
         for axcfg in axles_cfgs:
@@ -109,21 +103,11 @@ def pick_data_for_task(raw_task):
     """
     try:
         assert raw_task["data_format"] == "raw_data"
-        dst_task = {
+        dst_task = copy.deepcopy(raw_task)
+        dst_task.update({
             "data_format": "plot_data",
             "graph_array": []
-        }
-        copy_list = [
-            "title", "desc", "show_all",
-            "axles_cfg_list",
-            "graph_cfg_list",
-            "line_cfg_list",
-            "point_cfg_list",
-            "save_raw_json",
-            "save_plot_json"
-        ]
-        for key in copy_list:
-            dst_task[key] = raw_task.get(key)
+        })
         #
         for raw_graph in raw_task["graph_array"]:
             dst_graph = pick_data_for_task_for_figure(raw_graph, raw_task["axles_cfg_list"])

@@ -33,47 +33,76 @@ module_name = "v.rd.plot"
 log = logging.getLogger(module_name)
 
 
-def _file_check(file):
+_task_check_list = [
+    "title", "desc",
+    #"show_all", "save_raw_json", "save_plot_json",
+    "graph_cfg_list",
+    "axles_cfg_list",
+    "line_cfg_list",
+    "point_cfg_list"
+]
+
+_graph_check_list = [
+    "title", "input",
+    # "show_pic", "save_pic", "save_raw_json", "save_plot_json",
+    "width", "height", "subw", "subh"
+]
+
+_axles_check_list = [
+    "title", "subx", "suby", "xprop", "yprop"
+]
+
+_line_check_list = [
+    "label", "cmp_res", "cmp_frames",
+    "input_param", "output_param"
+]
+
+_point_check_list = [
+    "label", "params"
+]
+
+
+def _missing_file(file):
     if not os.path.isfile(file):
         log.error("file not exist: " + file)
         return 1
     return 0
 
 
-def _tool_check():
+def _missing_tools():
     """
     :return: 0 for ok, else something problem
     """
     ret = 0
-    ret += _file_check(FFMPEG)
-    ret += _file_check(FONT_MSYH)
-    ret += _file_check(RUN_VMAF)
-    ret += _file_check(RUN_VMAF_PY)
+    ret += _missing_file(FFMPEG)
+    ret += _missing_file(FONT_MSYH)
+    ret += _missing_file(RUN_VMAF)
+    ret += _missing_file(RUN_VMAF_PY)
     return ret
 
 
-def _input_check(task_cfg):
+def _missing_inputs(task_cfg):
     """
     :return: 0 for ok, else something problem
     """
     ret = 0
     graph_cfg_list = task_cfg["graph_cfg_list"]
     for graph in graph_cfg_list:
-        ret += _file_check(graph["input"])
+        ret += _missing_file(graph["input"])
     return ret
 
 
 def start_check(task_cfg):
-    if _tool_check() != 0:
-        log.error("tool check failed")
-        return 1
-    if _input_check(task_cfg) != 0:
-        log.error("input check failed")
-        return 2
-    return 0
+    if _missing_tools() != 0:
+        raise EnvironmentError("tool check failed")
+    if _missing_inputs(task_cfg) != 0:
+        raise IOError("input check failed")
 
 
 def _copy_non_exist_key(cfg_list, cfg_base):
+    """
+    copy maps, of that not exist in @cfg_base, from @cfg_base to @cfg_list
+    """
     for key in cfg_base:
         for entry in cfg_list:
             entry[key] = entry.get(key, cfg_base[key])
@@ -94,10 +123,38 @@ def config_parse(task_cfg):
             entry["params"][key] = entry["params"].get(key, cfg_base[key])
 
 
+def _missing_keys(d, check_list, father_name):
+    node_name = d.get("label", d.get("title", "unknown_node"))
+    n_lost = 0
+    for key in check_list:
+        if key not in d:
+            log.error("missing '{:s}' in node {:s}['{:s}']".format(key, father_name, node_name))
+            n_lost += 1
+    return n_lost
+
+
+def config_check(task_cfg):
+    log.info(json.dumps(task_cfg, indent=4))
+    if _missing_keys(task_cfg, _task_check_list, "root"):
+        raise KeyError()
+    for graph_cfg in task_cfg["graph_cfg_list"]:
+        if _missing_keys(graph_cfg, _graph_check_list, "graph_cfg_list"):
+            raise KeyError()
+    for axles_cfg in task_cfg["axles_cfg_list"]:
+        if _missing_keys(axles_cfg, _axles_check_list, "axles_cfg_list"):
+            raise KeyError()
+    for line_cfg in task_cfg["line_cfg_list"]:
+        if _missing_keys(line_cfg, _line_check_list, "line_cfg_list"):
+            raise KeyError()
+    for point_cfg in task_cfg["point_cfg_list"]:
+        if _missing_keys(point_cfg, _point_check_list, "point_cfg_list"):
+            raise KeyError()
+
+
 def run_rd_task(task_cfg):
-    if start_check(task_cfg) != 0:
-        raise ValueError("missing tools or config error")
+    start_check(task_cfg)
     config_parse(task_cfg)
+    config_check(task_cfg)
     try:
         raw_task_data = collect.collect_task_data(task_cfg)
         dst_task_data = plot.pick_data_for_task(raw_task_data)
@@ -133,6 +190,7 @@ def _create_module_log():
     import logger
     logger.log2file(module_name + ".log", logging.INFO)
     logger.log2stdout(None, logfmt=logger.DEFAULT_LOGFMT)
+
 
 if __name__ == "__main__":
     import sys
