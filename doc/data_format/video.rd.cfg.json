@@ -5,6 +5,9 @@
     "save_raw_json": "video.rd.raw.json",
     "save_plot_json": "video.rd.plot.json",
     "data_format": "cfg_data",
+    "video_save_dir": "save_video",
+    "data_save_dir": "save_data",
+    "yuv_save_dir": "save_yuv",
 
     "axles_cfg_base": {
 

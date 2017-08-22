@@ -26,6 +26,7 @@ import copy
 import json
 import logging
 import subprocess
+import video.utils as utils
 import cfg.tools
 
 FFMPEG = cfg.tools.ffmpeg
@@ -74,7 +75,7 @@ def pick_data_for_task_for_axles(raw_line_array, axcfg):
     return dst_axles
 
 
-def pick_data_for_task_for_figure(raw_graph, axles_cfgs):
+def pick_data_for_task_for_figure(task_cfg, raw_graph, axles_cfgs):
     """
     convert multi-dimensional line to 2d-alxes according to @alxes_cfgs
     :return: figure data for plot
@@ -92,7 +93,11 @@ def pick_data_for_task_for_figure(raw_graph, axles_cfgs):
             dst_axles = pick_data_for_task_for_axles(raw_line_array, axcfg)
             dst_graph["axles_array"].append(dst_axles)
         if dst_graph.get("save_plot_json") is not None:
-            with open(dst_graph.get("save_plot_json"), "w") as f:
+            save_path = utils.prepare_save_path(
+                save_name=dst_graph.get("save_plot_json"),
+                save_dir=task_cfg.get("data_save_dir")
+            )
+            with open(save_path, "w") as f:
                 json.dump(dst_graph, fp=f, indent=4)
         return dst_graph
     except Exception as e:
@@ -115,12 +120,19 @@ def pick_data_for_task(raw_task):
             "graph_array": []
         })
         #
+        task_cfg = raw_task
+        axles_cfgs = task_cfg["axles_cfg_list"]
+
         for raw_graph in raw_task["graph_array"]:
-            dst_graph = pick_data_for_task_for_figure(raw_graph, raw_task["axles_cfg_list"])
+            dst_graph = pick_data_for_task_for_figure(task_cfg, raw_graph, axles_cfgs)
             dst_task["graph_array"].append(dst_graph)
         #
         if dst_task.get("save_plot_json") is not None:
-            with open(dst_task.get("save_plot_json"), "w") as f:
+            save_path = utils.prepare_save_path(
+                save_name=dst_task.get("save_plot_json"),
+                save_dir=task_cfg.get("data_save_dir")
+            )
+            with open(save_path, "w") as f:
                 json.dump(dst_task, fp=f, indent=4)
         #
         return dst_task
@@ -144,7 +156,7 @@ def plot_axles_data(fig, gs, dst_axles):
     return ax
 
 
-def plot_figure_data(dst_graph):
+def plot_figure_data(task_cfg, dst_graph):
     try:
         assert dst_graph["data_format"] == "plot_data"
         log.info(json.dumps(dst_graph, indent=4))
@@ -157,7 +169,11 @@ def plot_figure_data(dst_graph):
         figure.tight_layout()
         #
         if dst_graph.get("save_pic") is not None:
-            figure.savefig(dst_graph["save_pic"])
+            save_path = utils.prepare_save_path(
+                save_name=dst_graph.get("save_pic"),
+                save_dir=task_cfg.get("data_save_dir")
+            )
+            figure.savefig(save_path)
         if dst_graph.get("show_pic") is True:
             plt.show(figure)
         return figure
@@ -167,13 +183,9 @@ def plot_figure_data(dst_graph):
 
 
 def plot_task_data(dst_task):
-    try:
-        assert dst_task["data_format"] == "plot_data"
-        for graph_data in dst_task["graph_array"]:
-            figure = plot_figure_data(graph_data)
-    except Exception as e:
-        log.error("Exception = `%s`", repr(e))
-        raise e
+    assert dst_task["data_format"] == "plot_data"
+    for graph_data in dst_task["graph_array"]:
+        plot_figure_data(dst_task, graph_data)
 
 
 def _main_test(json_file):

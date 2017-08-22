@@ -21,6 +21,7 @@ Brief
     video quality assessment
 """
 
+import os
 import json
 import logging
 import re
@@ -134,18 +135,19 @@ def _get_vmaf_from_command(cmd_args):
 #     return _get_psnr_ssim_from_command(cmd_args)
 
 
-def get_yuv_score(ref_fmt, dis_fmt, cmp_res=None, cmp_frames=None, has_psnr=True, has_vmaf=True):
+def get_yuv_score(ref_fmt, dis_fmt, cmp_res=None, cmp_frames=None, has_psnr=True, has_vmaf=True, save_dir=None):
     """
     decoding to yuv and then calculate quality score like psnr,ssim,vmaf
     :param ref_fmt: original video info <trans.Format>
     :param dis_fmt: transcoded video info <trans.Format>
     :param cmp_res: compare resolution <trans.CTransSize>. If None, use original resolution.
+    :param save_dir: save yuv file in @save_dir, or delete yuv filte if None
     :return: (psnr,ssim) <double, double>
     """
     cmp_res = ref_fmt.size if (cmp_res is None or cmp_res.s() == 0) else cmp_res
     oparam = ["-vframes", str(cmp_frames)] if (cmp_frames is not None) else []
-    ref_yuv = trans.to_yuv_by_size(ref_fmt, cmp_res, _oparam=oparam)
-    dis_yuv = trans.to_yuv_by_size(dis_fmt, cmp_res, _oparam=oparam)
+    ref_yuv = trans.to_yuv_by_size(ref_fmt, cmp_res, _oparam=oparam, save_dir=save_dir)
+    dis_yuv = trans.to_yuv_by_size(dis_fmt, cmp_res, _oparam=oparam, save_dir=save_dir)
     if ref_yuv is None or dis_yuv is None:
         log.error("failed to get"
                   + (" ref_yuv" if ref_yuv is None else "")
@@ -168,6 +170,9 @@ def get_yuv_score(ref_fmt, dis_fmt, cmp_res=None, cmp_frames=None, has_psnr=True
         vmaf_args += [ref_yuv, dis_yuv, "--out-fmt", "json"]
         vmaf = _get_vmaf_from_command(vmaf_args)
     #
+    if save_dir is None:
+        os.remove(ref_yuv)
+        os.remove(dis_yuv)
     return psnr, ssim, vmaf
 
 

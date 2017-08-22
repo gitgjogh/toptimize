@@ -25,6 +25,7 @@ import logging
 import os
 import subprocess
 import info
+import utils
 import cfg.tools
 
 FFMPEG = cfg.tools.ffmpeg
@@ -119,6 +120,7 @@ class Format:
         self.path = basename + "." + suffix + "." + ext
         return self.path
 
+
 def run_command(cmdargs):
     """
     video transcoding
@@ -133,8 +135,8 @@ def run_command(cmdargs):
             log.error("error[{:d}]: \n{:s}".format(process.returncode, error))
         return process.returncode
     except Exception as e:
-        log.error("Exception = `%s`", str(e))
-        return -1
+        log.error("Exception = `%s`", repr(e))
+        raise e
     return 0
 
 def trans_by_ioparam(input, iparam, oparam, output):
@@ -150,7 +152,7 @@ def trans_by_ioparam(input, iparam, oparam, output):
     return run_command(command)
 
 
-def to_264_by_size_crf(original, tsize, crf, save_path=None, _iparam=[]):
+def to_264_by_size_crf(original, tsize, crf, save_name=None, _iparam=[], save_dir=None):
     """
     :return: path for the transcoded video
     """
@@ -162,8 +164,9 @@ def to_264_by_size_crf(original, tsize, crf, save_path=None, _iparam=[]):
     oparam += "-maxrate 2500k -bufsize 5M".split(" ")
     oparam += "-async 1 -b:a 48k -ar 44100 -ac 2 -acodec libfdk_aac".split(" ")
     oparam += "-movflags faststart".split(" ")
-    if save_path is None:
-        save_path = os.path.basename(original.path) + ".[" + tsize.wxh() + "].[" + str(crf) + "].mp4"
+    if save_name is None:
+        save_name = os.path.basename(original.path) + ".[" + tsize.wxh() + "].[" + str(crf) + "].mp4"
+    save_path = utils.prepare_save_path(save_name, save_dir)
     ret = trans_by_ioparam(original.path, iparam, oparam, save_path)
     if ret is not 0:
         log.error("transcoding failed")
@@ -171,15 +174,16 @@ def to_264_by_size_crf(original, tsize, crf, save_path=None, _iparam=[]):
     return save_path
 
 
-def to_yuv_by_size(original, tsize, save_path=None, _iparam=[], _oparam=[]):
+def to_yuv_by_size(original, tsize, save_name=None, _iparam=[], _oparam=[], save_dir=None):
     """
     :return: path for the raw yuv
     """
     tsize.shorter2wxh(original.size)
     iparam = "-y -threads 0".split(" ") + _iparam
     oparam = ["-an", "-s", tsize.wxh()] + _oparam + ["-f", "rawvideo"]
-    if save_path is None:
-        save_path = os.path.basename(original.path) + ".[" + tsize.wxh() + "].yuv"
+    if save_name is None:
+        save_name = os.path.basename(original.path) + ".[" + tsize.wxh() + "].yuv"
+    save_path = utils.prepare_save_path(save_name, save_dir)
     ret = trans_by_ioparam(original.path, iparam, oparam, save_path)
     if ret is not 0:
         log.error("transcoding failed")

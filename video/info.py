@@ -65,7 +65,7 @@ def probe_info(video):
         return vinfo
     except Exception as e:
         log.error("Exception = `%s`", str(e));
-        return None
+        raise e
 
     return None
 

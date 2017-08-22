@@ -35,7 +35,7 @@ FFMPEG = cfg.tools.ffmpeg
 FONT_MSYH = cfg.tools.font_msyh
 RUN_VMAF = cfg.tools.run_vmaf
 RUN_VMAF_PY = cfg.tools.run_vmaf_py
-module_name = "v.rd.plot"
+module_name = "v.rd"
 log = logging.getLogger(module_name)
 
 

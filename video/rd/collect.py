@@ -30,6 +30,7 @@ import subprocess
 import video.info as info
 import video.trans as trans
 import video.score as score
+import video.utils as utils
 import cfg.tools
 
 
@@ -43,7 +44,7 @@ def _append_param_to_name(name, param, value, sep="-"):
     return cat
 
 
-def collect_point_data(graph_cfg, line_cfg, point_cfg):
+def collect_point_data(task_cfg, graph_cfg, line_cfg, point_cfg):
     raw_point_data = {"label": point_cfg["label"]}
     input = graph_cfg["input"]
     output = os.path.basename(input)
@@ -57,6 +58,7 @@ def collect_point_data(graph_cfg, line_cfg, point_cfg):
         oparam = oparam.replace("%" + param + "%", str(value))
         output = _append_param_to_name(output, param, str(value))
     output += ".mp4"
+    output = utils.prepare_save_path(output, task_cfg.get("video_save_dir"))
     start_time = time.time()
     ret = trans.trans_by_ioparam(input, iparam.split(), oparam.split(), output)
     trans_time = time.time() - start_time
@@ -71,34 +73,40 @@ def collect_point_data(graph_cfg, line_cfg, point_cfg):
     })
     # video quality evaluation
     if ret == 0:
+        print output
         ori_fmt = trans.Format(input, probe=True)
         dis_fmt = trans.Format(output, probe=True)
+        print output
         cmp_res = line_cfg.get("cmp_res")
         cmp_frm = line_cfg.get("cmp_frames")
-        psnr, ssim, vmaf = score.get_yuv_score(ori_fmt, dis_fmt, cmp_res, cmp_frames=cmp_frm)
+        psnr, ssim, vmaf = score.get_yuv_score(
+            ori_fmt, dis_fmt, cmp_res,
+            cmp_frames=cmp_frm,
+            save_dir=task_cfg.get("yuv_save_dir"))
         raw_point_data.update({
             "rate": dis_fmt.br,
             "psnr": psnr, "ssim": ssim, "vmaf": vmaf
         })
+        print output
     else:
         log.error("trans failed (" + str(ret) + ")")
     #
     return raw_point_data
 
 
-def collect_line_data(graph_cfg, line_cfg, point_cfgs):
+def collect_line_data(task_cfg, graph_cfg, line_cfg, point_cfgs):
     raw_line = copy.deepcopy(line_cfg)
     raw_line.update({
         "point_array": []
     })
     #
     for point_cfg in point_cfgs:
-        raw_point_data = collect_point_data(graph_cfg, line_cfg, point_cfg)
+        raw_point_data = collect_point_data(task_cfg, graph_cfg, line_cfg, point_cfg)
         raw_line["point_array"].append(raw_point_data)
     return raw_line
 
 
-def collect_figure_data(graph_cfg, line_cfgs, point_cfgs):
+def collect_figure_data(task_cfg, graph_cfg, line_cfgs, point_cfgs):
     raw_graph = copy.deepcopy(graph_cfg)
     raw_graph.update({
         "data_format": "raw_data",
@@ -106,11 +114,15 @@ def collect_figure_data(graph_cfg, line_cfgs, point_cfgs):
     })
     #
     for line_cfg in line_cfgs:
-        raw_line = collect_line_data(graph_cfg, line_cfg, point_cfgs)
+        raw_line = collect_line_data(task_cfg, graph_cfg, line_cfg, point_cfgs)
         raw_graph["line_array"].append(raw_line)
     #
-    if raw_graph.get("save_raw_json") is not None:
-        with open(raw_graph.get("save_raw_json"), "w") as f:
+    if graph_cfg.get("save_raw_json") is not None:
+        save_path = utils.prepare_save_path(
+            save_name=graph_cfg.get("save_raw_json"),
+            save_dir=task_cfg.get("data_save_dir")
+        )
+        with open(save_path, "w") as f:
             json.dump(raw_graph, fp=f, indent=4)
     #
     return raw_graph
@@ -130,12 +142,15 @@ def collect_task_data(task_cfg):
         point_cfgs = task_cfg["point_cfg_list"]
         #
         for graph_cfg in graph_cfgs:
-            raw_graph = collect_figure_data(graph_cfg, line_cfgs, point_cfgs)
+            raw_graph = collect_figure_data(task_cfg, graph_cfg, line_cfgs, point_cfgs)
             raw_task["graph_array"].append(raw_graph)
         #
-        print raw_task.get("save_raw_json")
-        if raw_task.get("save_raw_json") is not None:
-            with open(raw_task.get("save_raw_json"), "w") as f:
+        if task_cfg.get("save_raw_json") is not None:
+            save_path = utils.prepare_save_path(
+                save_name=task_cfg.get("save_raw_json"),
+                save_dir=task_cfg.get("data_save_dir")
+            )
+            with open(save_path, "w") as f:
                 json.dump(raw_task, fp=f, indent=4)
         #
         return raw_task
