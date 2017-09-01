@@ -1,0 +1,47 @@
+{
+    "title": "example",
+    "desc": "...",
+    "data_format": "video.eval.task.config",
+    "save_result_json": "video.eval.result.json",
+    "save_result_csv": "video.eval.result.csv",
+    "data_save_dir": "save_data",
+    "yuv_save_dir": "save_yuv",
+
+    "seq_preload": {
+        "cmp_size": null,
+        "cmp_frames": 100
+    },
+    "seq_list":[
+        {
+            "reference": {
+                "path": ""
+            },
+            "trans_list": [
+                {
+                    "cmp_frames": 60,
+                    "path": "",
+                    "desc": ""
+                },
+                {
+                    "path": "",
+                    "desc": ""
+                }
+            ]
+        },
+        {
+            "reference": {
+                "path": ""
+            },
+            "trans_list": [
+                {
+                    "path": "",
+                    "desc": ""
+                },
+                {
+                    "path": "",
+                    "desc": ""
+                }
+            ]
+        }
+    ]
+}
